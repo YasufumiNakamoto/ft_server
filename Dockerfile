@@ -1,30 +1,31 @@
 FROM debian:buster
 
+
 RUN set -x \
-	&& apt update \
-	&& apt install -y \
-	#install nginx, wordpress
+	&& apt-get update \
+	&& apt-get install -y \
+	#install nginx
 	nginx \
-	wordpress \
-	#install some command CHECK need curl or not
-	curl \
 	wget \
-	systemd \
-	#install mysql
+	openssl \
+	supervisor \
+	#download src file
 	&& wget https://dev.mysql.com/get/mysql-apt-config_0.8.16-1_all.deb \
-	&& echo 4 | apt install -y ./mysql-apt-config_0.8.16-1_all.deb \
+	&& wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz \
+	#install mysql
+	&& echo 4 | apt-get install -y ./mysql-apt-config_0.8.16-1_all.deb \
+	&& apt-get update \
 	&& echo "mysql-server mysql-server/root_password password mysql" | debconf-set-selections \
 	&& echo "mysql-server mysql-server/root_password_again password mysql" | debconf-set-selections \
 	&& echo "mysql-server mysql-server/default-auth-override select Use Strong Password Encryption (RECOMMENDED)" | debconf-set-selections \
-	&& apt update \
-	&& DEBIAN_FRONTEND=noninteractive apt install -y \
-	mysql-server \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server \
+	&& apt-get install -y \
 	libmysqlclient-dev \
 	php-mbstring \
 	php-zip \
+	wordpress \
 	#install phpmyadmin
-	&& wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz \
-	&& tar xvf phpMyAdmin-5.0.4-all-languages.tar.gz \
+	&& tar -xf phpMyAdmin-5.0.4-all-languages.tar.gz \
 	&& mv phpMyAdmin-5.0.4-all-languages/ /usr/share/phpmyadmin \
-	&& apt clean \
+	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*

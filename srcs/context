@@ -1,8 +1,0 @@
-nginx web server in one docker container(debian buster)
-run wordpress, phpadmin, mysql at same time.
-sql server works with wordpress and phpadmin.
-
-use ssl protcol
-
-
-

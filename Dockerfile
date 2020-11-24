@@ -20,3 +20,6 @@ RUN set -x \
 
 COPY ./srcs/pma_config.inc.php /var/www/html/phpmyadmin/config.inc.php
 COPY ./srcs/nginx.conf /etc/nginx/sites-available/default
+#COPY ./srcs/index.html /tmp/index.html
+COPY ./srcs/phpinfo.php /tmp/index.php
+COPY ./srcs/start.sh /tmp/start.sh

@@ -31,6 +31,8 @@ RUN openssl req -newkey rsa:4096 \
 #copy setting files
 COPY ./srcs/pma_config.inc.php /var/www/html/phpmyadmin/config.inc.php
 COPY ./srcs/nginx.conf /etc/nginx/sites-available/default
+COPY ./srcs/php.ini /etc/php/7.3/fpm/php.ini
+COPY ./srcs/wp-config-default.php /etc/wordpress/config-localhost.php
 
 #copy debug files
 #COPY ./srcs/index.html /tmp/index.html

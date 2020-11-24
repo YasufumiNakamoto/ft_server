@@ -33,6 +33,7 @@ RUN openssl req -newkey rsa:4096 \
 COPY ./srcs/pma_config.inc.php /var/www/html/phpmyadmin/config.inc.php
 COPY ./srcs/nginx.conf /etc/nginx/sites-available/default
 COPY ./srcs/wp-config-default.php /etc/wordpress/config-default.php
+COPY ./srcs/supervisorc.conf /eetc/supervisord.conf
 
 #setting mysql
 RUN	service mysql start \
@@ -43,6 +44,6 @@ RUN	service mysql start \
 	&& echo "update mysql.user set plugin='' where user='wordpress';"| mysql -u root
 
 #copy debug files
-COPY ./srcs/start.sh /tmp/start.sh
+#COPY ./srcs/start.sh /tmp/start.sh
 
-#CMD bash start.sh
+ENTRYPOINT [ "usr/bin/supervisord" ]

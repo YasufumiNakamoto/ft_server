@@ -10,12 +10,13 @@ RUN set -x \
 	mariadb-server \
 	wordpress \
 	php-mbstring php-zip php-fpm php-pear \
+	&& cp -rf /usr/share/wordpress/* /var/www/html/ \
 	#install phpmyadmin
 	&& curl -O https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz \
 	&& tar -xf phpMyAdmin-5.0.4-all-languages.tar.gz \
 	&& mv phpMyAdmin-5.0.4-all-languages/ /var/www/html/phpmyadmin \
+	#delete cache
 	&& apt-get clean \
-	&& cp -r /usr/share/wordpress/* /var/www/html/ \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm phpMyAdmin-5.0.4-all-languages.tar.gz
 
@@ -27,16 +28,21 @@ RUN openssl req -newkey rsa:4096 \
 	-nodes \
 	-out server.crt \
 	-keyout server.key \
-	-subj "/C=JP/ST=tokyo/L=tokyo/O=42tokyo/OU=IT Department/CN=www.example.com"
+	-subj "/C=JP/ST=tokyo/L=tokyo/O=42tokyo/OU=IT Department/CN=ynakamot"
 #copy setting files
 COPY ./srcs/pma_config.inc.php /var/www/html/phpmyadmin/config.inc.php
 COPY ./srcs/nginx.conf /etc/nginx/sites-available/default
-COPY ./srcs/php.ini /etc/php/7.3/fpm/php.ini
-COPY ./srcs/wp-config-default.php /etc/wordpress/config-localhost.php
+COPY ./srcs/wp-config-default.php /etc/wordpress/config-default.php
+
+#setting mysql
+RUN	service mysql start \
+	&& echo "CREATE DATABASE wpdb;"| mysql -u root \
+	&& echo "CREATE USER 'wordpress'@'localhost' identified by 'wordpress';"| mysql -u root \
+	&& echo "GRANT ALL PRIVILEGES ON wpdb.* TO 'wordpress'@'localhost' WITH GRANT OPTION;"| mysql -u root \
+	&& echo "FLUSH PRIVILEGES;"| mysql -u root \
+	&& echo "update mysql.user set plugin='' where user='wordpress';"| mysql -u root
 
 #copy debug files
-#COPY ./srcs/index.html /tmp/index.html
-COPY ./srcs/phpinfo.php /tmp/index.php
 COPY ./srcs/start.sh /tmp/start.sh
 
 #CMD bash start.sh

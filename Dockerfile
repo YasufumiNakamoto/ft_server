@@ -15,6 +15,7 @@ RUN set -x \
 	&& tar -xf phpMyAdmin-5.0.4-all-languages.tar.gz \
 	&& mv phpMyAdmin-5.0.4-all-languages/ /var/www/html/phpmyadmin \
 	&& apt-get clean \
+	&& cp -r /usr/share/wordpress/* /var/www/html/ \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm phpMyAdmin-5.0.4-all-languages.tar.gz
 
@@ -35,3 +36,5 @@ COPY ./srcs/nginx.conf /etc/nginx/sites-available/default
 #COPY ./srcs/index.html /tmp/index.html
 COPY ./srcs/phpinfo.php /tmp/index.php
 COPY ./srcs/start.sh /tmp/start.sh
+
+#CMD bash start.sh

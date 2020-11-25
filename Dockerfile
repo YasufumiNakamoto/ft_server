@@ -37,7 +37,7 @@ RUN openssl req -newkey rsa:4096 \
 COPY ./srcs/pma_config.inc.php /var/www/html/phpmyadmin/config.inc.php
 COPY ./srcs/nginx.conf.tmpl /tmp/nginx.conf.tmpl
 COPY ./srcs/wp-config-default.php /etc/wordpress/config-default.php
-COPY ./srcs/supervisorc.conf /eetc/supervisord.conf
+COPY ./srcs/supervisord.conf /etc/supervisord.conf
 
 #setting mysql
 RUN	service mysql start \
@@ -50,4 +50,4 @@ RUN	service mysql start \
 #copy init shell script
 COPY ./srcs/start.sh /tmp/start.sh
 
-ENTRYPOINT [ "usr/bin/supervisord" ]
+ENTRYPOINT [ "/bin/bash", "/tmp/start.sh" ]

@@ -1,5 +1,4 @@
-service nginx start
-service php7.3-fpm start
-service mysql restart
+envsubst < nginx.conf.tmpl > default
+cp -f /tmp/default /etc/nginx/sites-available/default
 
-tail -f /dev/null
+/usr/bin/supervisord

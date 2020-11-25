@@ -43,7 +43,7 @@ COPY ./srcs/supervisord.conf /etc/supervisord.conf
 RUN	service mysql start \
 	&& echo "CREATE DATABASE wpdb;"| mysql -u root \
 	&& echo "CREATE USER 'wordpress'@'localhost' identified by 'wordpress';"| mysql -u root \
-	&& echo "GRANT ALL PRIVILEGES ON wpdb.* TO 'wordpress'@'localhost' WITH GRANT OPTION;"| mysql -u root \
+	&& echo "GRANT ALL PRIVILEGES ON wpdb.* TO 'wordpress'@'localhost' WITH GRANT OPTION;"| mysql -u root
 
 #copy init shell script
 COPY ./srcs/start.sh /tmp/start.sh

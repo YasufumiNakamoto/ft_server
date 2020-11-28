@@ -38,7 +38,10 @@ COPY ./srcs/pma_config.inc.php /var/www/html/phpmyadmin/config.inc.php
 COPY ./srcs/nginx.conf.tmpl /tmp/nginx.conf.tmpl
 COPY ./srcs/wp-config-default.php /etc/wordpress/config-default.php
 COPY ./srcs/supervisord.conf /etc/supervisord.conf
-
+#add read permission
+RUN	chmod +r /var/www/html/phpmyadmin/config.inc.php \
+	&& chmod +r /etc/wordpress/config-default.php \
+	&& chmod +r /etc/supervisord.conf
 #setting mysql
 RUN	service mysql start \
 	&& echo "CREATE DATABASE wpdb;"| mysql -u root \
